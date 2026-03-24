@@ -1,0 +1,204 @@
+{
+  "info": {
+    "_postman_id": "f1fdf1d2-eval-tienda-online-ms",
+    "name": "Evaluación - Tienda Online Microservicios",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Colección para probar los microservicios de usuarios y productos/compras."
+  },
+  "variable": [
+    {
+      "key": "usuariosUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "productosUrl",
+      "value": "http://localhost:8082"
+    }
+  ],
+  "item": [
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "01 - Listar usuarios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{usuariosUrl}}/api/usuarios"
+          }
+        },
+        {
+          "name": "02 - Crear usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreCompleto\": \"Josefa Arriagada\",\n  \"correo\": \"josefa@tienda.cl\",\n  \"password\": \"josefa123\",\n  \"rol\": \"CLIENTE\",\n  \"activo\": 1\n}"
+            },
+            "url": "{{usuariosUrl}}/api/usuarios"
+          }
+        },
+        {
+          "name": "03 - Obtener usuario por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{usuariosUrl}}/api/usuarios/1"
+          }
+        },
+        {
+          "name": "04 - Actualizar usuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreCompleto\": \"Administrador General\",\n  \"correo\": \"admin@tienda.cl\",\n  \"password\": \"admin123\",\n  \"rol\": \"ADMIN\",\n  \"activo\": 1\n}"
+            },
+            "url": "{{usuariosUrl}}/api/usuarios/1"
+          }
+        },
+        {
+          "name": "05 - Login correcto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"admin@tienda.cl\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": "{{usuariosUrl}}/api/auth/login"
+          }
+        },
+        {
+          "name": "06 - Eliminar usuario",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{usuariosUrl}}/api/usuarios/4"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Productos y Compras",
+      "item": [
+        {
+          "name": "01 - Listar productos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{productosUrl}}/api/productos"
+          }
+        },
+        {
+          "name": "02 - Crear producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Webcam Logitech C920\",\n  \"descripcion\": \"Webcam full hd ideal para streaming\",\n  \"categoria\": \"Accesorios\",\n  \"precio\": 79990,\n  \"stock\": 9,\n  \"activo\": 1\n}"
+            },
+            "url": "{{productosUrl}}/api/productos"
+          }
+        },
+        {
+          "name": "03 - Obtener producto por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{productosUrl}}/api/productos/1"
+          }
+        },
+        {
+          "name": "04 - Buscar producto por nombre",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{productosUrl}}/api/productos/buscar?nombre=Mouse"
+          }
+        },
+        {
+          "name": "05 - Buscar por categoría",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{productosUrl}}/api/productos/categoria/Accesorios"
+          }
+        },
+        {
+          "name": "06 - Actualizar producto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Notebook Lenovo IdeaPad 15\",\n  \"descripcion\": \"Notebook de 15 pulgadas con 16GB RAM y SSD\",\n  \"categoria\": \"Tecnologia\",\n  \"precio\": 579990,\n  \"stock\": 6,\n  \"activo\": 1\n}"
+            },
+            "url": "{{productosUrl}}/api/productos/1"
+          }
+        },
+        {
+          "name": "07 - Comprar producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clienteNombre\": \"Camila Soto\",\n  \"clienteCorreo\": \"camila@tienda.cl\",\n  \"cantidad\": 1\n}"
+            },
+            "url": "{{productosUrl}}/api/productos/2/comprar"
+          }
+        },
+        {
+          "name": "08 - Listar compras",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{productosUrl}}/api/compras"
+          }
+        },
+        {
+          "name": "09 - Eliminar producto",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{productosUrl}}/api/productos/6"
+          }
+        }
+      ]
+    }
+  ]
+}
