@@ -1,0 +1,20 @@
+# Maven / Java
+target/
+.mvn/
+*.log
+.classpath
+.project
+.settings/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+application-local.properties
