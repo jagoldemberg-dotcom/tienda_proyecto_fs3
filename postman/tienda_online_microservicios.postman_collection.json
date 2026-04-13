@@ -1,9 +1,9 @@
 {
   "info": {
     "_postman_id": "f1fdf1d2-eval-tienda-online-ms",
-    "name": "Evaluación - Tienda Online Microservicios",
+    "name": "Evaluación - Tienda Online FullStack III",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": "Colección para probar los microservicios de usuarios y productos/compras."
+    "description": "Colección para probar los 3 microservicios de la tienda online."
   },
   "variable": [
     {
@@ -13,14 +13,18 @@
     {
       "key": "productosUrl",
       "value": "http://localhost:8082"
+    },
+    {
+      "key": "gestionUrl",
+      "value": "http://localhost:8083"
     }
   ],
   "item": [
     {
-      "name": "Usuarios",
+      "name": "01 - Usuarios",
       "item": [
         {
-          "name": "01 - Listar usuarios",
+          "name": "Listar usuarios",
           "request": {
             "method": "GET",
             "header": [],
@@ -28,7 +32,7 @@
           }
         },
         {
-          "name": "02 - Crear usuario",
+          "name": "Crear usuario",
           "request": {
             "method": "POST",
             "header": [
@@ -39,38 +43,13 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombreCompleto\": \"Josefa Arriagada\",\n  \"correo\": \"josefa@tienda.cl\",\n  \"password\": \"josefa123\",\n  \"rol\": \"CLIENTE\",\n  \"activo\": 1\n}"
+              "raw": "{\n  \"nombreCompleto\": \"Josefa Arriagada\",\n  \"correo\": \"josefa@tienda.cl\",\n  \"password\": \"Josefa123!\",\n  \"rol\": \"CLIENTE\",\n  \"activo\": 1\n}"
             },
             "url": "{{usuariosUrl}}/api/usuarios"
           }
         },
         {
-          "name": "03 - Obtener usuario por ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{usuariosUrl}}/api/usuarios/1"
-          }
-        },
-        {
-          "name": "04 - Actualizar usuario",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"nombreCompleto\": \"Administrador General\",\n  \"correo\": \"admin@tienda.cl\",\n  \"password\": \"admin123\",\n  \"rol\": \"ADMIN\",\n  \"activo\": 1\n}"
-            },
-            "url": "{{usuariosUrl}}/api/usuarios/1"
-          }
-        },
-        {
-          "name": "05 - Login correcto",
+          "name": "Login admin",
           "request": {
             "method": "POST",
             "header": [
@@ -87,69 +66,7 @@
           }
         },
         {
-          "name": "06 - Eliminar usuario",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": "{{usuariosUrl}}/api/usuarios/4"
-          }
-        }
-      ]
-    },
-    {
-      "name": "Productos y Compras",
-      "item": [
-        {
-          "name": "01 - Listar productos",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{productosUrl}}/api/productos"
-          }
-        },
-        {
-          "name": "02 - Crear producto",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Webcam Logitech C920\",\n  \"descripcion\": \"Webcam full hd ideal para streaming\",\n  \"categoria\": \"Accesorios\",\n  \"precio\": 79990,\n  \"stock\": 9,\n  \"activo\": 1\n}"
-            },
-            "url": "{{productosUrl}}/api/productos"
-          }
-        },
-        {
-          "name": "03 - Obtener producto por ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{productosUrl}}/api/productos/1"
-          }
-        },
-        {
-          "name": "04 - Buscar producto por nombre",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{productosUrl}}/api/productos/buscar?nombre=Mouse"
-          }
-        },
-        {
-          "name": "05 - Buscar por categoría",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": "{{productosUrl}}/api/productos/categoria/Accesorios"
-          }
-        },
-        {
-          "name": "06 - Actualizar producto",
+          "name": "Actualizar usuario",
           "request": {
             "method": "PUT",
             "header": [
@@ -160,13 +77,50 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Notebook Lenovo IdeaPad 15\",\n  \"descripcion\": \"Notebook de 15 pulgadas con 16GB RAM y SSD\",\n  \"categoria\": \"Tecnologia\",\n  \"precio\": 579990,\n  \"stock\": 6,\n  \"activo\": 1\n}"
+              "raw": "{\n  \"nombreCompleto\": \"Administrador General\",\n  \"correo\": \"admin@tienda.cl\",\n  \"password\": \"Admin2026\",\n  \"rol\": \"ADMIN\",\n  \"activo\": 1\n}"
             },
-            "url": "{{productosUrl}}/api/productos/1"
+            "url": "{{usuariosUrl}}/api/usuarios/1"
           }
         },
         {
-          "name": "07 - Comprar producto",
+          "name": "Eliminar usuario",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{usuariosUrl}}/api/usuarios/4"
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Productos y compras",
+      "item": [
+        {
+          "name": "Listar productos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{productosUrl}}/api/productos"
+          }
+        },
+        {
+          "name": "Buscar por nombre",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{productosUrl}}/api/productos/buscar?nombre=Mouse"
+          }
+        },
+        {
+          "name": "Buscar por categoría",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{productosUrl}}/api/productos/categoria/Accesorios"
+          }
+        },
+        {
+          "name": "Comprar producto",
           "request": {
             "method": "POST",
             "header": [
@@ -183,19 +137,74 @@
           }
         },
         {
-          "name": "08 - Listar compras",
+          "name": "Listar compras",
           "request": {
             "method": "GET",
             "header": [],
             "url": "{{productosUrl}}/api/compras"
           }
+        }
+      ]
+    },
+    {
+      "name": "03 - Gestión de productos",
+      "item": [
+        {
+          "name": "Listar productos admin",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{gestionUrl}}/api/admin/productos"
+          }
         },
         {
-          "name": "09 - Eliminar producto",
+          "name": "Crear producto admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Smartwatch Xiaomi\",\n  \"descripcion\": \"Reloj inteligente con monitor de actividad\",\n  \"categoria\": \"Wearables\",\n  \"precio\": 89990,\n  \"stock\": 14,\n  \"activo\": 1\n}"
+            },
+            "url": "{{gestionUrl}}/api/admin/productos"
+          }
+        },
+        {
+          "name": "Actualizar producto admin",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Notebook Lenovo IdeaPad 15\",\n  \"descripcion\": \"Notebook de 15 pulgadas con 16GB RAM y SSD\",\n  \"categoria\": \"Tecnologia\",\n  \"precio\": 579990,\n  \"stock\": 7,\n  \"activo\": 1\n}"
+            },
+            "url": "{{gestionUrl}}/api/admin/productos/1"
+          }
+        },
+        {
+          "name": "Cambiar estado producto",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": "{{gestionUrl}}/api/admin/productos/1/estado/0"
+          }
+        },
+        {
+          "name": "Eliminar producto admin",
           "request": {
             "method": "DELETE",
             "header": [],
-            "url": "{{productosUrl}}/api/productos/6"
+            "url": "{{gestionUrl}}/api/admin/productos/6"
           }
         }
       ]

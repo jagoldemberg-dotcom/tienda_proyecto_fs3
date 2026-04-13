@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: ./frontend-tienda-angular
+    container_name: tienda-frontend
+    ports:
+      - "4200:80"
+
+  ms-usuarios:
+    build:
+      context: ./ms-usuarios
+    container_name: tienda-ms-usuarios
+    ports:
+      - "8081:8081"
+
+  ms-productos:
+    build:
+      context: ./ms-productos
+    container_name: tienda-ms-productos
+    ports:
+      - "8082:8082"
+
+  ms-gestion-productos:
+    build:
+      context: ./ms-gestion-productos
+    container_name: tienda-ms-gestion-productos
+    ports:
+      - "8083:8083"

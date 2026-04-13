@@ -1,99 +1,74 @@
-# Evaluación Desarrollo Full Stack III - BackEnd Tienda en Línea
+# Desarrollo FullStack III - Tienda Online NovaMarket
 
-Este repositorio contiene una propuesta completa para la evaluación del caso **Sistema de Gestión de Pedidos de una Tienda en Línea**, basada en la estructura del ejemplo entregado por el docente, pero adaptada al caso solicitado en `instrucciones.docx`.
+Proyecto ajustado a la actividad **Desarrollando nuestro proyecto bajo lineamientos empresariales**.
 
-## Contenido
+## Estructura
+- `frontend-tienda-angular`
+- `ms-usuarios`
+- `ms-productos`
+- `ms-gestion-productos`
+- `database/01_tienda_online_oracle.sql`
+- `postman/tienda_online_microservicios.postman_collection.json`
+- `arquetipo-backend`
+- `docker-compose.yml`
 
-- `ms-usuarios`: microservicio para CRUD de usuarios e inicio de sesión.
-- `ms-productos`: microservicio para CRUD de productos, búsqueda y compra simulada.
-- `database/01_tienda_online_oracle.sql`: script Oracle con creación de tablas e inserción de datos.
-- `postman/tienda_online_microservicios.postman_collection.json`: colección de pruebas para ambos microservicios.
+## Lo que cubre la solución
+### FrontEnd
+- Angular
+- Bootstrap y CSS
+- responsive para móvil, tablet y escritorio
+- login, registro, recuperar contraseña y perfil
+- catálogo, compras y administración
+- 2 roles: ADMIN y CLIENTE
+- datos manejados con arreglos, colecciones y localStorage
+- patrón Facade
 
-## Microservicios implementados
-
-### 1) Microservicio de usuarios
-Puerto sugerido: `8081`
-
-Funcionalidades:
-- Crear usuario
-- Listar usuarios
-- Buscar usuario por ID
-- Actualizar usuario
-- Eliminar usuario
-- Login básico por correo y contraseña
-- Manejo de roles: `ADMIN` y `CLIENTE`
-
-### 2) Microservicio de productos y compras
-Puerto sugerido: `8082`
-
-Funcionalidades:
-- Crear producto
-- Listar productos
-- Buscar producto por ID
-- Buscar por nombre
-- Buscar por categoría
-- Actualizar producto
-- Eliminar producto
-- Comprar producto (simulado)
-- Listar compras realizadas
-
-## Requisitos recomendados
-
-- Java 21
-- Maven 3.9+
-- Oracle Database / Oracle XE
+### BackEnd
+- Spring Boot
+- 3 microservicios
+- Oracle
+- endpoints JSON
 - Postman
+- arquetipo consistente: controller, service, repository, model, dto y exception
 
-## Configuración base de Oracle
+## Puertos
+- FrontEnd: 4200
+- ms-usuarios: 8081
+- ms-productos: 8082
+- ms-gestion-productos: 8083
 
-En ambos microservicios debes revisar el archivo `src/main/resources/application.properties` y cambiar:
+## Oracle
+Edita los `application.properties` según tu conexión y ejecuta el script de `database`.
 
-- `spring.datasource.url`
-- `spring.datasource.username`
-- `spring.datasource.password`
+## Ejecución local
+### FrontEnd
+```bash
+cd frontend-tienda-angular
+npm install
+npm start
+```
 
-El script SQL está pensado para ejecutarse con un usuario Oracle dedicado, por ejemplo `TIENDA_FS3`.
-
-## Orden recomendado de ejecución
-
-1. Crear el usuario/schema en Oracle.
-2. Ejecutar `database/01_tienda_online_oracle.sql`.
-3. Configurar `application.properties` en ambos microservicios.
-4. Levantar `ms-usuarios`.
-5. Levantar `ms-productos`.
-6. Probar con Postman usando la colección incluida.
-
-## Ejecución con Maven
-
-### ms-usuarios
+### Microservicios
 ```bash
 cd ms-usuarios
 mvn spring-boot:run
 ```
 
-### ms-productos
 ```bash
 cd ms-productos
 mvn spring-boot:run
 ```
 
-## Endpoints principales
+```bash
+cd ms-gestion-productos
+mvn spring-boot:run
+```
 
-### Usuarios
-- `GET /api/usuarios`
-- `GET /api/usuarios/{id}`
-- `POST /api/usuarios`
-- `PUT /api/usuarios/{id}`
-- `DELETE /api/usuarios/{id}`
-- `POST /api/auth/login`
+## Docker
+```bash
+docker compose up --build
+```
 
-### Productos
-- `GET /api/productos`
-- `GET /api/productos/{id}`
-- `GET /api/productos/buscar?nombre=...`
-- `GET /api/productos/categoria/{categoria}`
-- `POST /api/productos`
-- `PUT /api/productos/{id}`
-- `DELETE /api/productos/{id}`
-- `POST /api/productos/{id}/comprar`
-- `GET /api/compras`
+## Cuentas FrontEnd
+- Admin: `admin@tienda.cl` / `Admin123!`
+- Cliente: `camila@tienda.cl` / `Cliente123!`
