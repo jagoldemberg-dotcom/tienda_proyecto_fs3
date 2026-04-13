@@ -1,4 +1,4 @@
-# Desarrollo FullStack III - Tienda Online NovaMarket
+# Desarrollo FullStack III - Tienda Online ElMercadillo
 
 Proyecto ajustado a la actividad **Desarrollando nuestro proyecto bajo lineamientos empresariales**.
 
