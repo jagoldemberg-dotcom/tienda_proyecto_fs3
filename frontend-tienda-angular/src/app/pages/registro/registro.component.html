@@ -1,0 +1,48 @@
+<section class="mx-auto card card-soft p-4 p-lg-5" style="max-width:720px">
+  <div class="text-center mb-4">
+    <h1 class="section-title">Registro de usuarios</h1>
+    <p class="small-muted mb-0">La contraseña debe cumplir 4 validaciones de seguridad.</p>
+  </div>
+
+  <form #registroForm="ngForm" (ngSubmit)="registrar()" novalidate>
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label">Nombre completo</label>
+        <input type="text" class="form-control" name="nombreCompleto" [(ngModel)]="nombreCompleto" required minlength="5" maxlength="120" #nombreCtrl="ngModel">
+        <div class="text-danger small mt-1" *ngIf="nombreCtrl.invalid && nombreCtrl.touched">Ingresa un nombre entre 5 y 120 caracteres.</div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <label class="form-label">Correo electrónico</label>
+        <input type="email" class="form-control" name="correo" [(ngModel)]="correo" required email #correoCtrl="ngModel">
+        <div class="text-danger small mt-1" *ngIf="correoCtrl.invalid && correoCtrl.touched">Debes ingresar un correo válido.</div>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <label class="form-label">Confirmar contraseña</label>
+        <input type="password" class="form-control" name="confirmarPassword" [(ngModel)]="confirmarPassword" required minlength="8" maxlength="20">
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Contraseña</label>
+        <input type="password" class="form-control" name="password" [(ngModel)]="password" required minlength="8" maxlength="20">
+        <div class="mt-2 small">
+          <div [class.text-success]="cumpleLargo" [class.text-danger]="!cumpleLargo">• Mínimo 8 caracteres</div>
+          <div [class.text-success]="cumpleMayuscula" [class.text-danger]="!cumpleMayuscula">• Al menos una mayúscula</div>
+          <div [class.text-success]="cumpleNumero" [class.text-danger]="!cumpleNumero">• Al menos un número</div>
+          <div [class.text-success]="cumpleEspecial" [class.text-danger]="!cumpleEspecial">• Al menos un carácter especial</div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="mensaje" class="alert mt-3" [ngClass]="error ? 'alert-danger' : 'alert-success'">{{ mensaje }}</div>
+
+    <div class="d-grid mt-4">
+      <button class="btn btn-nm" type="submit" [disabled]="registroForm.invalid">Registrar usuario</button>
+    </div>
+
+    <div class="text-center mt-3">
+      <a routerLink="/login">Volver al inicio de sesión</a>
+    </div>
+  </form>
+</section>

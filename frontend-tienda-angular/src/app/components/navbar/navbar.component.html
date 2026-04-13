@@ -1,0 +1,23 @@
+<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold d-flex align-items-center" routerLink="/"><span class="logo-pill">NM</span>NovaMarket</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+        <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Inicio</a></li>
+        <ng-container *ngIf="facade.usuarioActual; else invitado">
+          <li class="nav-item"><a class="nav-link" routerLink="/catalogo" routerLinkActive="active">Catálogo</a></li>
+          <li class="nav-item" *ngIf="!facade.esAdmin"><a class="nav-link" routerLink="/mis-compras" routerLinkActive="active">Mis compras</a></li>
+          <li class="nav-item" *ngIf="facade.esAdmin"><a class="nav-link" routerLink="/admin-productos" routerLinkActive="active">Administración</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/perfil" routerLinkActive="active">Perfil</a></li>
+          <li class="nav-item ms-lg-2"><span class="badge rounded-pill badge-role px-3 py-2">{{ facade.usuarioActual?.rol }}</span></li>
+          <li class="nav-item"><button class="btn btn-outline-dark btn-sm ms-lg-2" (click)="cerrarSesion()">Cerrar sesión</button></li>
+        </ng-container>
+        <ng-template #invitado>
+          <li class="nav-item"><a class="nav-link" routerLink="/registro" routerLinkActive="active">Registro</a></li>
+          <li class="nav-item"><a class="btn btn-nm btn-sm px-3" routerLink="/login">Ingresar</a></li>
+        </ng-template>
+      </ul>
+    </div>
+  </div>
+</nav>

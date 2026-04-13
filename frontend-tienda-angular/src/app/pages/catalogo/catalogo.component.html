@@ -1,0 +1,94 @@
+<section class="mb-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+        <div>
+            <h1 class="section-title mb-1">Catálogo de productos</h1>
+            <p class="small-muted mb-0">
+                Búsqueda, visualización y compra simulada para el rol cliente.
+            </p>
+        </div>
+        <span class="badge rounded-pill badge-role px-3 py-2">
+      {{ facade.usuarioActual?.rol }}
+    </span>
+    </div>
+
+    <div class="card card-soft p-3 p-lg-4 mb-4">
+        <div class="row g-3">
+            <div class="col-12 col-md-8">
+                <input
+                        class="form-control"
+                        [(ngModel)]="filtroNombre"
+                        (input)="filtrar()"
+                        placeholder="Buscar por nombre"
+                />
+            </div>
+
+            <div class="col-12 col-md-4">
+                <select
+                        class="form-select"
+                        [(ngModel)]="filtroCategoria"
+                        (change)="filtrar()"
+                >
+                    <option value="">Todas las categorías</option>
+                    <option *ngFor="let categoria of categorias" [value]="categoria">
+                        {{ categoria }}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-info" *ngIf="mensaje">
+        {{ mensaje }}
+    </div>
+
+    <div class="row g-3" *ngIf="productosFiltrados.length > 0; else sinProductos">
+        <div class="col-12 col-md-6 col-xl-4" *ngFor="let producto of productosFiltrados">
+            <article class="card card-soft h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="display-5 mb-2">{{ producto.imagen }}</div>
+                    <h2 class="h5 fw-bold">{{ producto.nombre }}</h2>
+                    <p class="small-muted">{{ producto.descripcion }}</p>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="price-tag">
+              {{ producto.precio | currency:'CLP':'symbol':'1.0-0' }}
+            </span>
+                        <span class="badge text-bg-light">{{ producto.categoria }}</span>
+                    </div>
+
+                    <p class="mb-3">
+                        <strong>Stock:</strong> {{ producto.stock }}
+                    </p>
+
+                    <div class="mt-auto row g-2 align-items-center">
+                        <div class="col-4">
+                            <input
+                                    type="number"
+                                    class="form-control"
+                                    min="1"
+                                    [max]="producto.stock"
+                                    [(ngModel)]="cantidades[producto.id]"
+                            />
+                        </div>
+
+                        <div class="col-8">
+                            <button
+                                    class="btn btn-nm w-100"
+                                    (click)="comprar(producto.id)"
+                                    [disabled]="producto.stock === 0"
+                            >
+                                {{ producto.stock === 0 ? 'Sin stock' : 'Comprar' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <ng-template #sinProductos>
+        <div class="empty-box text-center">
+            No se encontraron productos con los filtros seleccionados.
+        </div>
+    </ng-template>
+</section>

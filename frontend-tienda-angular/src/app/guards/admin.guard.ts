@@ -1,0 +1,1 @@
+import { inject } from "@angular/core"; import { Router } from "@angular/router"; import { TiendaFacadeService } from "../services/tienda-facade.service"; export const adminGuard = () => { const facade = inject(TiendaFacadeService); const router = inject(Router); return facade.usuarioActual && facade.esAdmin ? true : router.createUrlTree(["/"]); };

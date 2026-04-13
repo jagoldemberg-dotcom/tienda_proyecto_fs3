@@ -1,0 +1,35 @@
+<section class="mx-auto card card-soft p-4 p-lg-5" style="max-width:720px">
+  <div class="text-center mb-4">
+    <h1 class="section-title">Inicio de sesión</h1>
+    <p class="small-muted mb-0">Usa una cuenta de prueba o registra una nueva.</p>
+  </div>
+
+  <div class="alert alert-info">
+    <strong>Pruebas:</strong><br>
+    Admin: admin&#64;tienda.cl / Admin123!<br>
+    Cliente: camila&#64;tienda.cl / Cliente123!
+  </div>
+
+  <form #loginForm="ngForm" (ngSubmit)="ingresar()" novalidate>
+    <div class="mb-3">
+      <label class="form-label">Correo electrónico</label>
+      <input type="email" class="form-control" name="correo" [(ngModel)]="correo" required email #correoCtrl="ngModel">
+      <div class="text-danger small mt-1" *ngIf="correoCtrl.invalid && correoCtrl.touched">Debes ingresar un correo válido.</div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Contraseña</label>
+      <input type="password" class="form-control" name="password" [(ngModel)]="password" required minlength="8" #passwordCtrl="ngModel">
+      <div class="text-danger small mt-1" *ngIf="passwordCtrl.invalid && passwordCtrl.touched">La contraseña es obligatoria y debe tener al menos 8 caracteres.</div>
+    </div>
+
+    <div *ngIf="mensaje" class="alert" [ngClass]="error ? 'alert-danger' : 'alert-success'">{{ mensaje }}</div>
+
+      <button class="btn btn-nm w-100" type="submit">Ingresar</button>
+
+    <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+      <a routerLink="/registro">Crear cuenta</a>
+      <a routerLink="/recuperar-password">Recuperar contraseña</a>
+    </div>
+  </form>
+</section>
