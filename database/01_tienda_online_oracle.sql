@@ -64,13 +64,13 @@ CREATE TABLE COMPRAS (
 -- DATOS INICIALES USUARIOS
 -- =========================
 INSERT INTO USUARIOS (NOMBRE_COMPLETO, CORREO, PASSWORD, ROL, ACTIVO) VALUES
-('Administrador Principal', 'admin@tienda.cl', 'admin123', 'ADMIN', 1);
+('Administrador Principal', 'admin@tienda.cl', 'Admin123!', 'ADMIN', 1);
 
 INSERT INTO USUARIOS (NOMBRE_COMPLETO, CORREO, PASSWORD, ROL, ACTIVO) VALUES
-('Camila Soto', 'camila@tienda.cl', 'cliente123', 'CLIENTE', 1);
+('Camila Soto', 'camila@tienda.cl', 'Cliente123!', 'CLIENTE', 1);
 
 INSERT INTO USUARIOS (NOMBRE_COMPLETO, CORREO, PASSWORD, ROL, ACTIVO) VALUES
-('Daniel Fuentes', 'daniel@tienda.cl', 'cliente123', 'CLIENTE', 1);
+('Daniel Fuentes', 'daniel@tienda.cl', 'Cliente123!', 'CLIENTE', 1);
 
 -- ==========================
 -- DATOS INICIALES PRODUCTOS
