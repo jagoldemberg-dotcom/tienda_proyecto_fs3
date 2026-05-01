@@ -28,7 +28,7 @@ public class Usuario {
 
     @NotBlank(message = "La contraseña es obligatoria.")
     @Size(min = 8, max = 20, message = "La contraseña debe tener entre 8 y 20 caracteres.")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d).{8,20}$", message = "La contraseña debe incluir letras y números.")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,20}$", message = "La contraseña debe incluir mayúscula, minúscula, número y carácter especial.")
     @Column(name = "PASSWORD", nullable = false, length = 120)
     private String password;
 

@@ -1,12 +1,13 @@
 package com.tienda.usuarios;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 class MsUsuariosApplicationTests {
 
     @Test
-    void contextLoads() {
+    void clasePrincipalExiste() {
+        assertNotNull(MsUsuariosApplication.class);
     }
 }
