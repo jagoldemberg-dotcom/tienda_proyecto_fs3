@@ -5,58 +5,67 @@ import { Producto } from '../../models/producto.model';
 import { TiendaFacadeService } from '../../services/tienda-facade.service';
 
 @Component({
-    selector: 'app-catalogo',
-    standalone: true,
-    imports: [CommonModule, FormsModule],
-    templateUrl: './catalogo.component.html'
+  selector: 'app-catalogo',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './catalogo.component.html'
 })
 export class CatalogoComponent implements OnInit {
-    filtroNombre = '';
-    filtroCategoria = '';
-    mensaje = '';
-    cantidades: Record<number, number> = {};
+  filtroNombre = '';
+  filtroCategoria = '';
+  mensaje = '';
+  cargando = false;
+  cantidades: Record<number, number> = {};
 
-    productos: Producto[] = [];
-    productosFiltrados: Producto[] = [];
-    categorias: string[] = [];
+  productos: Producto[] = [];
+  productosFiltrados: Producto[] = [];
+  categorias: string[] = [];
 
-    constructor(public facade: TiendaFacadeService) {}
+  constructor(public facade: TiendaFacadeService) {}
 
-    ngOnInit(): void {
-        this.cargarProductos();
-    }
+  ngOnInit(): void {
+    this.cargarProductos();
+  }
 
-    cargarProductos(): void {
-        this.productos = this.facade.obtenerProductos() || [];
-        this.categorias = [...new Set(this.productos.map(p => p.categoria))];
-        this.productosFiltrados = [...this.productos];
-
+  cargarProductos(): void {
+    this.cargando = true;
+    this.facade.obtenerProductos().subscribe({
+      next: productos => {
+        this.productos = productos || [];
+        this.categorias = [...new Set(this.productos.map(producto => producto.categoria))];
         this.productos.forEach(producto => {
-            if (!this.cantidades[producto.id]) {
-                this.cantidades[producto.id] = 1;
-            }
+          if (!this.cantidades[producto.id]) {
+            this.cantidades[producto.id] = 1;
+          }
         });
-    }
+        this.filtrar();
+        this.cargando = false;
+      },
+      error: () => {
+        this.mensaje = 'No fue posible cargar los productos.';
+        this.cargando = false;
+      }
+    });
+  }
 
-    filtrar(): void {
-        const nombre = this.filtroNombre.toLowerCase().trim();
-        const categoria = this.filtroCategoria;
+  filtrar(): void {
+    const nombre = this.filtroNombre.toLowerCase().trim();
+    const categoria = this.filtroCategoria;
 
-        this.productosFiltrados = this.productos.filter(p =>
-            p.nombre.toLowerCase().includes(nombre) &&
-            (!categoria || p.categoria === categoria)
-        );
-    }
+    this.productosFiltrados = this.productos.filter(producto =>
+      producto.nombre.toLowerCase().includes(nombre) &&
+      (!categoria || producto.categoria === categoria)
+    );
+  }
 
-    comprar(productoId: number): void {
-        const cantidad = this.cantidades[productoId] ?? 1;
-        const r = this.facade.comprarProducto(productoId, cantidad);
-        this.mensaje = r.mensaje;
-
-        if (r.ok) {
-            this.cantidades[productoId] = 1;
-            this.cargarProductos();
-            this.filtrar();
-        }
-    }
+  comprar(productoId: number): void {
+    const cantidad = this.cantidades[productoId] ?? 1;
+    this.facade.comprarProducto(productoId, cantidad).subscribe(resultado => {
+      this.mensaje = resultado.mensaje;
+      if (resultado.ok) {
+        this.cantidades[productoId] = 1;
+        this.cargarProductos();
+      }
+    });
+  }
 }

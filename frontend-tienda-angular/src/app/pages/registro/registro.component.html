@@ -1,7 +1,7 @@
 <section class="mx-auto card card-soft p-4 p-lg-5" style="max-width:720px">
   <div class="text-center mb-4">
     <h1 class="section-title">Registro de usuarios</h1>
-    <p class="small-muted mb-0">La contraseña debe cumplir 4 validaciones de seguridad.</p>
+    <p class="small-muted mb-0">La contraseña debe cumplir validaciones de seguridad.</p>
   </div>
 
   <form #registroForm="ngForm" (ngSubmit)="registrar()" novalidate>
@@ -29,6 +29,7 @@
         <div class="mt-2 small">
           <div [class.text-success]="cumpleLargo" [class.text-danger]="!cumpleLargo">• Mínimo 8 caracteres</div>
           <div [class.text-success]="cumpleMayuscula" [class.text-danger]="!cumpleMayuscula">• Al menos una mayúscula</div>
+          <div [class.text-success]="cumpleMinuscula" [class.text-danger]="!cumpleMinuscula">• Al menos una minúscula</div>
           <div [class.text-success]="cumpleNumero" [class.text-danger]="!cumpleNumero">• Al menos un número</div>
           <div [class.text-success]="cumpleEspecial" [class.text-danger]="!cumpleEspecial">• Al menos un carácter especial</div>
         </div>
@@ -38,7 +39,9 @@
     <div *ngIf="mensaje" class="alert mt-3" [ngClass]="error ? 'alert-danger' : 'alert-success'">{{ mensaje }}</div>
 
     <div class="d-grid mt-4">
-      <button class="btn btn-nm" type="submit" [disabled]="registroForm.invalid">Registrar usuario</button>
+      <button class="btn btn-nm" type="submit" [disabled]="registroForm.invalid || cargando">
+        {{ cargando ? 'Guardando...' : 'Registrar usuario' }}
+      </button>
     </div>
 
     <div class="text-center mt-3">
