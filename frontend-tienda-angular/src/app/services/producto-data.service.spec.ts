@@ -42,7 +42,7 @@ describe('ProductoDataService', () => {
     ]);
   });
 
-  it('debe guardar producto usando microservicio de gestión', done => {
+  it('debe guardar producto nuevo usando POST sin enviar id cero', done => {
     service.guardarProducto({ id: 0, nombre: 'Nuevo', descripcion: 'Desc', categoria: 'Audio', precio: 2000, stock: 3, activo: 1, imagen: '🎧' }).subscribe(producto => {
       expect(producto.id).toBe(10);
       expect(producto.imagen).toBe('🎧');
@@ -52,6 +52,7 @@ describe('ProductoDataService', () => {
     const req = httpMock.expectOne(`${API_CONFIG.gestionProductosUrl}/productos`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body.imagen).toBeUndefined();
+    expect(req.request.body.id).toBeUndefined();
     req.flush({ id: 10, nombre: 'Nuevo', descripcion: 'Desc', categoria: 'Audio', precio: 2000, stock: 3, activo: 1 });
   });
 
@@ -92,6 +93,18 @@ describe('ProductoDataService', () => {
     ]);
   });
 
+  it('debe informar error cuando falla carga de productos de administración', done => {
+    service.obtenerProductosAdmin().subscribe({
+      next: () => fail('La carga de administración debía fallar si la API no responde.'),
+      error: () => {
+        expect(service.obtenerProductosFallback().length).toBeGreaterThan(0);
+        done();
+      }
+    });
+
+    httpMock.expectOne(`${API_CONFIG.gestionProductosUrl}/productos`).error(new ProgressEvent('error'));
+  });
+
   it('debe actualizar producto existente usando PUT', done => {
     service.guardarProducto({ id: 2, nombre: 'Mouse', descripcion: 'Gamer', categoria: 'Accesorios', precio: 24990, stock: 20, activo: 1, imagen: '🖱️' }).subscribe(producto => {
       expect(producto.id).toBe(2);
@@ -102,7 +115,20 @@ describe('ProductoDataService', () => {
     const req = httpMock.expectOne(`${API_CONFIG.gestionProductosUrl}/productos/2`);
     expect(req.request.method).toBe('PUT');
     expect(req.request.body.imagen).toBeUndefined();
+    expect(req.request.body.id).toBe(2);
     req.flush({ id: 2, nombre: 'Mouse', descripcion: 'Gamer', categoria: 'Accesorios', precio: 24990, stock: 20, activo: 1 });
+  });
+
+  it('debe informar error cuando falla crear producto en API de gestión', done => {
+    service.guardarProducto({ id: 0, nombre: 'Nuevo', descripcion: 'Desc', categoria: 'Audio', precio: 2000, stock: 3, activo: 1, imagen: '🎧' }).subscribe({
+      next: () => fail('La operación debía fallar si no se pudo insertar en Oracle.'),
+      error: () => {
+        expect(service.obtenerProductosFallback().some(producto => producto.nombre === 'Nuevo')).toBeFalse();
+        done();
+      }
+    });
+
+    httpMock.expectOne(`${API_CONFIG.gestionProductosUrl}/productos`).error(new ProgressEvent('error'));
   });
 
   it('debe eliminar producto usando API y actualizar almacenamiento local', done => {
@@ -118,10 +144,13 @@ describe('ProductoDataService', () => {
     req.flush(null);
   });
 
-  it('debe eliminar producto con fallback cuando la API falla', done => {
-    service.eliminarProducto(2).subscribe(() => {
-      expect(service.obtenerProductosFallback().some(producto => producto.id === 2)).toBeFalse();
-      done();
+  it('debe informar error y no modificar localStorage cuando falla eliminar en API de gestión', done => {
+    service.eliminarProducto(2).subscribe({
+      next: () => fail('La operación debía fallar si la API de gestión no responde.'),
+      error: () => {
+        expect(service.obtenerProductosFallback().some(producto => producto.id === 2)).toBeTrue();
+        done();
+      }
     });
 
     httpMock.expectOne(`${API_CONFIG.gestionProductosUrl}/productos/2`).error(new ProgressEvent('error'));

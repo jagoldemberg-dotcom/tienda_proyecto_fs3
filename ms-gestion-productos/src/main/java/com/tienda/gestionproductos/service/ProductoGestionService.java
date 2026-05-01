@@ -36,6 +36,10 @@ public class ProductoGestionService {
     }
 
     public Producto guardar(Producto producto) {
+        // En creación el ID debe ir null para que Oracle genere el valor de la columna IDENTITY.
+        // Esto evita que un request con id = 0 sea tratado como entidad existente o detached.
+        producto.setId(null);
+
         if (producto.getActivo() == null) {
             producto.setActivo(1);
         }

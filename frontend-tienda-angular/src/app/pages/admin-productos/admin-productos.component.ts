@@ -31,7 +31,7 @@ export class AdminProductosComponent implements OnInit {
         this.cargando = false;
       },
       error: () => {
-        this.mensaje = 'No fue posible cargar los productos.';
+        this.mensaje = 'No fue posible cargar los productos desde la base de datos.';
         this.cargando = false;
       }
     });
@@ -48,20 +48,34 @@ export class AdminProductosComponent implements OnInit {
   }
 
   guardar(): void {
-    this.facade.guardarProducto({ ...this.formulario }).subscribe(() => {
-      this.mensaje = this.editandoId ? 'Producto actualizado correctamente.' : 'Producto creado correctamente.';
-      this.limpiar();
-      this.cargarProductos();
+    this.cargando = true;
+    this.facade.guardarProducto({ ...this.formulario }).subscribe({
+      next: () => {
+        this.mensaje = this.editandoId ? 'Producto actualizado correctamente en la base de datos.' : 'Producto creado correctamente en la base de datos.';
+        this.limpiar();
+        this.cargarProductos();
+      },
+      error: () => {
+        this.mensaje = 'No fue posible guardar el producto en la base de datos. Revisa que ms-gestion-productos esté ejecutándose y conectado a Oracle.';
+        this.cargando = false;
+      }
     });
   }
 
   eliminar(id: number): void {
-    this.facade.eliminarProducto(id).subscribe(() => {
-      this.mensaje = 'Producto eliminado correctamente.';
-      if (this.editandoId === id) {
-        this.limpiar();
+    this.cargando = true;
+    this.facade.eliminarProducto(id).subscribe({
+      next: () => {
+        this.mensaje = 'Producto eliminado correctamente de la base de datos.';
+        if (this.editandoId === id) {
+          this.limpiar();
+        }
+        this.cargarProductos();
+      },
+      error: () => {
+        this.mensaje = 'No fue posible eliminar el producto en la base de datos. Revisa el microservicio de gestión y Oracle.';
+        this.cargando = false;
       }
-      this.cargarProductos();
     });
   }
 

@@ -146,6 +146,17 @@ class ProductoGestionServiceTest {
         verify(productoRepository).delete(producto);
     }
 
+    
+    void guardarIgnoraIdCeroParaPermitirIdentityDeOracle() {
+        Producto producto = producto(0L, 4, 1);
+        when(productoRepository.save(producto)).thenReturn(producto);
+
+        productoGestionService.guardar(producto);
+
+        assertNull(producto.getId());
+        verify(productoRepository).save(producto);
+    }
+
     private Producto producto(Long id, Integer stock, Integer activo) {
         return new Producto(id, "Notebook", "Notebook oficina", "Tecnologia", BigDecimal.valueOf(99990), stock, activo);
     }

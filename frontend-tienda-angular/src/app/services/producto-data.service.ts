@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, of, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { API_CONFIG } from '../config/api.config';
 import { Compra, CompraResponse, Producto } from '../models/producto.model';
 import { StorageService } from './storage.service';
@@ -48,29 +48,36 @@ export class ProductoDataService {
     return this.http.get<Producto[]>(`${API_CONFIG.gestionProductosUrl}/productos`).pipe(
       map(productos => productos.map(producto => this.conImagen(producto))),
       tap(productos => this.storage.setItem(PRODUCTOS_KEY, productos)),
-      catchError(() => of(this.obtenerProductosFallback()))
+      catchError(error => {
+        console.error('No fue posible cargar productos desde la API de gestión.', error);
+        return throwError(() => error);
+      })
     );
   }
 
   guardarProducto(producto: Producto): Observable<Producto> {
-    const request = this.sinImagen(producto);
-    const operacion = producto.id && producto.id > 0
+    const esEdicion = !!(producto.id && producto.id > 0);
+    const request = this.crearProductoRequest(producto, esEdicion);
+    const operacion = esEdicion
       ? this.http.put<Producto>(`${API_CONFIG.gestionProductosUrl}/productos/${producto.id}`, request)
       : this.http.post<Producto>(`${API_CONFIG.gestionProductosUrl}/productos`, request);
 
     return operacion.pipe(
       map(productoGuardado => this.conImagen(productoGuardado)),
       tap(productoGuardado => this.guardarProductoFallback(productoGuardado)),
-      catchError(() => of(this.guardarProductoFallback(producto)))
+      catchError(error => {
+        console.error('No fue posible guardar el producto en la API de gestión.', error);
+        return throwError(() => error);
+      })
     );
   }
 
   eliminarProducto(id: number): Observable<void> {
     return this.http.delete<void>(`${API_CONFIG.gestionProductosUrl}/productos/${id}`).pipe(
       tap(() => this.eliminarProductoFallback(id)),
-      catchError(() => {
-        this.eliminarProductoFallback(id);
-        return of(void 0);
+      catchError(error => {
+        console.error('No fue posible eliminar el producto en la API de gestión.', error);
+        return throwError(() => error);
       })
     );
   }
@@ -195,9 +202,9 @@ export class ProductoDataService {
     };
   }
 
-  private sinImagen(producto: Producto): Omit<Producto, 'imagen'> {
-    const { imagen, ...productoApi } = producto;
-    return productoApi;
+  private crearProductoRequest(producto: Producto, incluirId: boolean): Partial<Producto> {
+    const { imagen, id, ...productoApi } = producto;
+    return incluirId ? { id, ...productoApi } : productoApi;
   }
 
   private obtenerIcono(categoria: string): string {
