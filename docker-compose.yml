@@ -1,5 +1,10 @@
 version: "3.9"
 
+x-oracle-env: &oracle-env
+  SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:oracle:thin:@//host.docker.internal:1521/FREEPDB1}
+  SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-TIENDA}
+  SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-Tienda1234}
+
 services:
   frontend:
     build:
@@ -7,6 +12,10 @@ services:
     container_name: tienda-frontend
     ports:
       - "4200:80"
+    depends_on:
+      - ms-usuarios
+      - ms-productos
+      - ms-gestion-productos
 
   ms-usuarios:
     build:
@@ -14,6 +23,10 @@ services:
     container_name: tienda-ms-usuarios
     ports:
       - "8081:8081"
+    environment:
+      <<: *oracle-env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   ms-productos:
     build:
@@ -21,6 +34,10 @@ services:
     container_name: tienda-ms-productos
     ports:
       - "8082:8082"
+    environment:
+      <<: *oracle-env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   ms-gestion-productos:
     build:
@@ -28,3 +45,7 @@ services:
     container_name: tienda-ms-gestion-productos
     ports:
       - "8083:8083"
+    environment:
+      <<: *oracle-env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
